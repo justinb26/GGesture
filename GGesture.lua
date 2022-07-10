@@ -10,21 +10,11 @@
     For some windows gestures check https://github.com/wookiefriseur/LogitechMouseGestures
     This script wil let you use a button on your mouse to act like the "Gesture button" from Logitech Options.
     It will also let you use another button on your mouse for navigating between browser pages using gestures.
-    The default settings below will be for the multytasking gestures from macOS
-    - Up 		Mission Control 	(Control+Up-Arrow)
-    - Down 	Application Windows (Control+Down-Arrow)
-    - Left 	move right a space 	(Control+Right-Arrow)
-    - Right 	move left a space 	(Control+Left-Arrow)
-    The default settings below will be for the navigation gestures for in browsers
- - Up 		{ no action }
- - Down 	{ no action }
- - Left 	next page 		(Command+Right-Bracket)
- - Right 	previous page 	(Command+Left-Bracket)
 ]]--
  
 -- The minimal horizontal/vertical distance your mouse needs to be moved for the gesture to recognize in pixels
-minimalHorizontalMovement = 200;
-minimalVerticalMovement = 200;
+minimalHorizontalMovement = 2500;
+minimalVerticalMovement = 2500;
 
 -- Default values for 
 horizontalStartingPosition = 0;
@@ -35,22 +25,51 @@ verticalEndingPosition = 0;
 -- Delay between keypresses in millies
 delay = 20
 
+os = "windows" -- windows, macos
 
-actions = {}
-    actions["5U"] = function() { pressTwoKeys("lctrl", "up")}
-    actions["5D"] = function() { pressTwoKeys("lctrl", "down")}
-    actions["5L"] = function() { pressTwoKeys("lctrl", "left")}
-    actions["5R"] = function() { pressTwoKeys("lctrl", "right")}
-
-    actions["6U"] = function() { pressThreeKeys("lctrl", "lalt", "up")}
-    actions["6D"] = function() { pressThreeKeys("lctrl", "lalt", "down")}
-    actions["6L"] = function() { pressThreeKeys("lctrl", "lalt", "left")}
-    actions["6R"] = function() { pressThreeKeys("lctrl", "lalt", "right")}
-        
+actions = { macos = {}, windows = {} }
 
 -- Toggles debugging messages
-debuggingEnabled = false
+debuggingEnabled = true
+os = "windows"
 
+
+currentCycle = 1
+cycleStates = { 
+  function() pressThreeKeys("lctrl", "lalt", "d") end, 
+  function() pressThreeKeys("lctrl", "lalt", "f") end, 
+  function() pressThreeKeys("lctrl", "lalt", "g") end 
+} 
+
+-- ==========================================================================================
+
+-- Macos actions
+actions["macos"]["5U"] = function() pressTwoKeys("lctrl", "up") end
+actions["macos"]["5D"] = function() pressTwoKeys("lctrl", "down") end
+actions["macos"]["5L"] = function() pressTwoKeys("lctrl", "left") end
+actions["macos"]["5R"] = function() pressTwoKeys("lctrl", "right") end
+
+actions["macos"]["6U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
+actions["macos"]["6D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
+--actions["macos"]["6L"] = function() pressThreeKeys("lctrl", "lalt", "left") end
+--actions["macos"]["6R"] = function() pressThreeKeys("lctrl", "lalt", "right") end
+
+actions["macos"]["6L"] = function() cycleStates[currentCycle](); if currentCycle == #cycleStates then currentCycle = 1 else currentCycle = currentCycle + 1 end end
+actions["macos"]["6R"] = function() cycleStates[currentCycle](); if currentCycle == 1 then currentCycle = #cycleStates else currentCycle = currentCycle - 1 end end
+
+-- ==========================================================================================
+
+-- Windows actions
+actions["windows"]["5U"] = function() pressTwoKeys("lctrl", "up") end
+actions["windows"]["5D"] = function() pressTwoKeys("lctrl", "down") end
+actions["windows"]["5L"] = function() pressTwoKeys("lgui", "left") end
+actions["windows"]["5R"] = function() pressTwoKeys("lgui", "right") end
+
+actions["windows"]["6U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
+actions["windows"]["6D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
+actions["windows"]["6L"] = function() pressThreeKeys("lctrl", "lgui", "left") end
+actions["windows"]["6R"] = function() pressThreeKeys("lctrl", "lgui", "right") end
+  
 -- ==========================================================================================
 
 -- TODO: What if multiple buttons are pressed? we should use the buttonNumber on MouseUp to match up to the right starting coords,
@@ -89,17 +108,21 @@ function OnEvent(event, arg, family)
 		horizontalDifference = horizontalStartingPosition - horizontalEndingPosition
 		verticalDifference   = verticalStartingPosition   - verticalEndingPosition
 
-        if horizontalDifference >  minimalHorizontalMovement then direction = "L" end
-		if horizontalDifference < -minimalHorizontalMovement then direction = "R" end
-		if verticalDifference   >  minimalVerticalMovement   then direction = "D" end
-		if verticalDifference   < -minimalVerticalMovement   then direction = "U" end
+        if horizontalDifference >  minimalHorizontalMovement then direction = "L" 
+        elseif horizontalDifference < -minimalHorizontalMovement then direction = "R"
+        elseif verticalDifference   >  minimalVerticalMovement   then direction = "D"
+        elseif verticalDifference   < -minimalVerticalMovement   then direction = "U" 
+        end
 
         if direction then
             key = buttonNumber .. direction
-            if actions[key] and type(actions[key]) == "function" then 
-                actions[key]() 
+            if actions[os][key] and type(actions[os][key]) == "function" then 
+                actions[os][key]() 
+                if debuggingEnabled then OutputLogMessage("Key" .. key) end
             end
         end
+        
+        direction = nil
 	end
 end
 
@@ -111,8 +134,9 @@ function pressTwoKeys(firstKey, secondKey)
 	Sleep(delay)
 	PressKey(secondKey)
 	Sleep(delay)
-	ReleaseKey(firstKey)
 	ReleaseKey(secondKey)
+	Sleep(delay)
+	ReleaseKey(firstKey)
 end
 
 -- Helper Functions
@@ -124,7 +148,9 @@ function pressThreeKeys(firstKey, secondKey, thirdKey)
 	PressKey(thirdKey)
 	Sleep(delay)
 
+       ReleaseKey(thirdKey)
+	Sleep(delay)
 	ReleaseKey(firstKey)
+	Sleep(delay)
 	ReleaseKey(secondKey)
-    ReleaseKey(thirdKey)
 end
