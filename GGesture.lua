@@ -13,8 +13,25 @@
 ]]--
  
 -- The minimal horizontal/vertical distance your mouse needs to be moved for the gesture to recognize in pixels
-minimalHorizontalMovement = 2500;
-minimalVerticalMovement = 2500;
+
+
+os = "macos" -- windows, macos
+
+minimalHorizontalMovement_WINDOWS = 2500; -- Roughly 1/26 of the screen
+minimalVerticalMovement_WINDOWS = 2500;
+
+minimalHorizontalMovement_MACOS = 200; -- 200px = about 1.8" at 110ppi
+minimalVerticalMovement_MACOS = 200;
+
+
+if (os == "windows") then
+	minimalHorizontalMovement = minimalHorizontalMovement_WINDOWS;
+	minimalVerticalMovement = minimalVerticalMovement_WINDOWS;
+else
+	minimalHorizontalMovement = minimalHorizontalMovement_MACOS;
+	minimalVerticalMovement = minimalVerticalMovement_MACOS;
+end
+
 
 -- Default values for 
 horizontalStartingPosition = 0;
@@ -25,13 +42,11 @@ verticalEndingPosition = 0;
 -- Delay between keypresses in millies
 delay = 20
 
-os = "windows" -- windows, macos
-
 actions = { macos = {}, windows = {} }
 
 -- Toggles debugging messages
 debuggingEnabled = true
-os = "windows"
+
 
 
 currentCycle = 1
@@ -44,18 +59,56 @@ cycleStates = {
 -- ==========================================================================================
 
 -- Macos actions
-actions["macos"]["5U"] = function() pressTwoKeys("lctrl", "up") end
-actions["macos"]["5D"] = function() pressTwoKeys("lctrl", "down") end
-actions["macos"]["5L"] = function() pressTwoKeys("lctrl", "left") end
-actions["macos"]["5R"] = function() pressTwoKeys("lctrl", "right") end
 
-actions["macos"]["6U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
-actions["macos"]["6D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
---actions["macos"]["6L"] = function() pressThreeKeys("lctrl", "lalt", "left") end
---actions["macos"]["6R"] = function() pressThreeKeys("lctrl", "lalt", "right") end
+-- Middle mouse button - Expose
+actions["macos"]["3"] = function() PressAndReleaseMouseButton(2) end
+actions["macos"]["3U"] = function() pressTwoKeys("lctrl", "up") end
+actions["macos"]["3D"] = function() pressTwoKeys("lctrl", "down") end
+actions["macos"]["3L"] = function() pressTwoKeys("lctrl", "left") end
+actions["macos"]["3R"] = function() pressTwoKeys("lctrl", "right") end
 
-actions["macos"]["6L"] = function() cycleStates[currentCycle](); if currentCycle == #cycleStates then currentCycle = 1 else currentCycle = currentCycle + 1 end end
-actions["macos"]["6R"] = function() cycleStates[currentCycle](); if currentCycle == 1 then currentCycle = #cycleStates else currentCycle = currentCycle - 1 end end
+-- Button 4 () - 
+actions["macos"]["4"] = function() PressAndReleaseMouseButton(4) end
+actions["macos"]["4U"] = function() end
+actions["macos"]["4D"] = function() end
+actions["macos"]["4L"] = function() end
+actions["macos"]["4R"] = function() end
+
+-- Button 5 (Bottom middle) - Magnet 1/3
+actions["macos"]["5"] = function() PressAndReleaseMouseButton(5) end
+actions["macos"]["5U"] = function() pressThreeKeys("lctrl", "lalt", "f") end
+actions["macos"]["5D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
+actions["macos"]["5L"] = function() pressThreeKeys("lctrl", "lalt", "d") end
+actions["macos"]["5R"] = function() pressThreeKeys("lctrl", "lalt", "g") end
+
+-- Button 6 () - 
+actions["macos"]["6"] = function() PressAndReleaseMouseButton(6) end
+actions["macos"]["6U"] = function() pressThreeKeys("lctrl", "lalt", "2") end
+actions["macos"]["6D"] = function() pressThreeKeys("lctrl", "lalt", "5¡") end
+actions["macos"]["6L"] = function() pressThreeKeys("lctrl", "lalt", "1") end
+actions["macos"]["6R"] = function() pressThreeKeys("lctrl", "lalt", "6") end
+
+-- Button 7 () - 
+actions["macos"]["7"] = function() PressAndReleaseMouseButton(7) end
+actions["macos"]["7U"] = function() end
+actions["macos"]["7D"] = function() end
+actions["macos"]["7L"] = function() end
+actions["macos"]["7R"] = function() end
+
+-- Button 8 (Top middle) - Magnet 1/2
+actions["macos"]["8"] = function() PressAndReleaseMouseButton(8) end
+actions["macos"]["8U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
+actions["macos"]["8D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
+actions["macos"]["8L"] = function() pressThreeKeys("lctrl", "lalt", "left") end
+actions["macos"]["8R"] = function() pressThreeKeys("lctrl", "lalt", "right") end
+
+-- Button 9 () - 
+actions["macos"]["9"] = function() PressAndReleaseMouseButton(9) end
+actions["macos"]["9U"] = function() end
+actions["macos"]["9D"] = function() end
+actions["macos"]["9L"] = function() end
+actions["macos"]["9R"] = function() end
+
 
 -- ==========================================================================================
 
@@ -65,10 +118,10 @@ actions["windows"]["5D"] = function() pressTwoKeys("lctrl", "down") end
 actions["windows"]["5L"] = function() pressTwoKeys("lgui", "left") end
 actions["windows"]["5R"] = function() pressTwoKeys("lgui", "right") end
 
-actions["windows"]["6U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
-actions["windows"]["6D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
-actions["windows"]["6L"] = function() pressThreeKeys("lctrl", "lgui", "left") end
-actions["windows"]["6R"] = function() pressThreeKeys("lctrl", "lgui", "right") end
+actions["windows"]["8U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
+actions["windows"]["8D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
+actions["windows"]["8L"] = function() pressThreeKeys("lctrl", "lgui", "left") end
+actions["windows"]["8R"] = function() pressThreeKeys("lctrl", "lgui", "right") end
   
 -- ==========================================================================================
 
@@ -112,6 +165,7 @@ function OnEvent(event, arg, family)
         elseif horizontalDifference < -minimalHorizontalMovement then direction = "R"
         elseif verticalDifference   >  minimalVerticalMovement   then direction = "D"
         elseif verticalDifference   < -minimalVerticalMovement   then direction = "U" 
+        else direction = ""
         end
 
         if direction then
