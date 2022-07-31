@@ -110,6 +110,7 @@ actions["macos"]["9L"] = function() pressKeyCombo({"lctrl", "lalt", "4"}) end
 actions["macos"]["9R"] = function() pressKeyCombo({"lctrl", "lalt", "6"}) end
 
 
+-- Chorded gestures
 actions["macos"]["58L"] = function() pressKeyCombo({"lctrl", "left"}) end
 actions["macos"]["58R"] = function() pressKeyCombo({"lctrl", "right"}) end
 
@@ -250,33 +251,6 @@ function clearStickyButtons()
   for i = 1, numButtons do stickyButtons[i] = false end
 end
 
--- Helper Functions
-function pressTwoKeys(firstKey, secondKey)
-    PressKey(firstKey)
-    Sleep(delay)
-    PressKey(secondKey)
-    Sleep(delay)
-    ReleaseKey(secondKey)
-    Sleep(delay)
-    ReleaseKey(firstKey)
-end
-
--- Helper Functions
-function pressThreeKeys(firstKey, secondKey, thirdKey)
-    PressKey(firstKey)
-    Sleep(delay)
-    PressKey(secondKey)
-    Sleep(delay)
-    PressKey(thirdKey)
-    Sleep(delay)
-
-    ReleaseKey(thirdKey)
-    Sleep(delay)
-    ReleaseKey(firstKey)
-    Sleep(delay)
-    ReleaseKey(secondKey)
-end
-
 -- ==================================================================
 
 -- Any modifiers are applied first. All keys are applied before any are released
@@ -285,7 +259,6 @@ function pressKeyCombo(keys)
 		PressKey(keys[i])
 		Sleep(delay)
 	end
-
 	for i = 1, #keys do
 		ReleaseKey(keys[i])
 		Sleep(delay)
