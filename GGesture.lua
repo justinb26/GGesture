@@ -10,11 +10,8 @@
     For some windows gestures check https://github.com/wookiefriseur/LogitechMouseGestures
     This script wil let you use a button on your mouse to act like the "Gesture button" from Logitech Options.
     It will also let you use another button on your mouse for navigating between browser pages using gestures.
-]]--
- 
+]] --
 -- The minimal horizontal/vertical distance your mouse needs to be moved for the gesture to recognize in pixels
-
-
 os = "macos" -- windows, macos
 
 minimalHorizontalMovement_WINDOWS = 2500; -- Roughly 1/26 of the screen
@@ -23,15 +20,13 @@ minimalVerticalMovement_WINDOWS = 2500;
 minimalHorizontalMovement_MACOS = 200; -- 200px = about 1.8" at 110ppi
 minimalVerticalMovement_MACOS = 100;
 
-
 if (os == "windows") then
-	minimalHorizontalMovement = minimalHorizontalMovement_WINDOWS;
-	minimalVerticalMovement = minimalVerticalMovement_WINDOWS;
+    minimalHorizontalMovement = minimalHorizontalMovement_WINDOWS;
+    minimalVerticalMovement = minimalVerticalMovement_WINDOWS;
 else
-	minimalHorizontalMovement = minimalHorizontalMovement_MACOS;
-	minimalVerticalMovement = minimalVerticalMovement_MACOS;
+    minimalHorizontalMovement = minimalHorizontalMovement_MACOS;
+    minimalVerticalMovement = minimalVerticalMovement_MACOS;
 end
-
 
 -- Default values for 
 horizontalStartingPosition = 0;
@@ -42,41 +37,41 @@ verticalEndingPosition = 0;
 -- Delay between keypresses in millies
 delay = 20
 
-actions = { macos = {}, windows = {} }
+actions = {macos = {}, windows = {}}
 
 -- Toggles debugging messages
 debuggingEnabled = true
 
-
-
-currentCycle = 1
-cycleStates = { 
-  function() pressThreeKeys("lctrl", "lalt", "d") end, 
-  function() pressThreeKeys("lctrl", "lalt", "f") end, 
-  function() pressThreeKeys("lctrl", "lalt", "g") end 
-} 
-
+-- disable to test internal logic without triggering gestures
+gesturesEnabled = true 
 -- ==========================================================================================
 
--- Macos actions
+numButtons = 9
+
 buttons = {}
-for i=1,9 do buttons[i] = false end
-  
+for i = 1, numButtons do buttons[i] = false end
+
+stickyButtons = {}
+for i = 1, numButtons do stickyButtons[i] = false end
+
+
+
+-- Macos actions
 
 -- Middle mouse button - Expose
---actions["macos"]["3"] = function() PressAndReleaseMouseButton(2) end -- Note: Button 2, not 3
---actions["macos"]["3U"] = function() end
---actions["macos"]["3D"] = function() end
---actions["macos"]["3L"] = function() end
---actions["macos"]["3R"] = function() end
+-- actions["macos"]["3"] = function() PressAndReleaseMouseButton(2) end -- Note: Button 2, not 3
+-- actions["macos"]["3U"] = function() end
+-- actions["macos"]["3D"] = function() end
+-- actions["macos"]["3L"] = function() end
+-- actions["macos"]["3R"] = function() end
 
 -- Button 4 (Bottom Right) - Magnet 1/2
---actions["macos"]["4"] = function() PressAndReleaseMouseButton(4) end
+-- actions["macos"]["4"] = function() PressAndReleaseMouseButton(4) end
 actions["macos"]["4"] = function() pressTwoKeys("lgui", "equal") end
 actions["macos"]["4U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
 actions["macos"]["4D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
 actions["macos"]["4L"] = function() pressThreeKeys("lctrl", "lalt", "left") end
-actions["macos"]["4R"] = function() pressThreeKeys("lctrl", "lalt", "right")end
+actions["macos"]["4R"] = function() pressThreeKeys("lctrl", "lalt", "right") end
 
 -- Button 5 (Bottom middle) - Magnet 1/3
 actions["macos"]["5"] = function() PressAndReleaseMouseButton(5) end
@@ -93,7 +88,7 @@ actions["macos"]["6L"] = function() pressThreeKeys("lctrl", "lalt", "1") end
 actions["macos"]["6R"] = function() pressThreeKeys("lctrl", "lalt", "3") end
 
 -- Button 7 (Top Right) - Expose
---actions["macos"]["7"] = function() PressAndReleaseMouseButton(9) end
+-- actions["macos"]["7"] = function() PressAndReleaseMouseButton(9) end
 actions["macos"]["7"] = function() pressTwoKeys("lgui", "minus") end
 actions["macos"]["7U"] = function() pressTwoKeys("lctrl", "up") end
 actions["macos"]["7D"] = function() pressTwoKeys("lctrl", "down") end
@@ -114,6 +109,11 @@ actions["macos"]["9D"] = function() pressThreeKeys("lctrl", "lalt", "5") end
 actions["macos"]["9L"] = function() pressThreeKeys("lctrl", "lalt", "4") end
 actions["macos"]["9R"] = function() pressThreeKeys("lctrl", "lalt", "6") end
 
+
+actions["macos"]["58L"] = function() pressTwoKeys("lctrl", "left") end
+actions["macos"]["58R"] = function() pressTwoKeys("lctrl", "right") end
+
+
 -- ==========================================================================================
 
 -- Windows actions
@@ -126,7 +126,7 @@ actions["windows"]["8U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
 actions["windows"]["8D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
 actions["windows"]["8L"] = function() pressThreeKeys("lctrl", "lgui", "left") end
 actions["windows"]["8R"] = function() pressThreeKeys("lctrl", "lgui", "right") end
-  
+
 -- ==========================================================================================
 
 -- TODO: What if multiple buttons are pressed? we should use the buttonNumber on MouseUp to match up to the right starting coords,
@@ -135,89 +135,146 @@ actions["windows"]["8R"] = function() pressThreeKeys("lctrl", "lgui", "right") e
 -- Event detection
 function OnEvent(event, arg, family)
     buttonNumber = arg
-    
+
     if event == "MOUSE_BUTTON_PRESSED" then
-              buttons[buttonNumber] = true
-		if debuggingEnabled then OutputLogMessage("\nEvent: " .. event .. " for button: " .. buttonNumber .. "\n") end
-		
-		-- Get starting mouse position
-		horizontalStartingPosition, verticalStartingPosition = GetMousePosition()
-		
-		if debuggingEnabled then 
-			OutputLogMessage("Horizontal starting Position: " .. horizontalStartingPosition .. "\n") 
-			OutputLogMessage("Vertical starting Position: " .. verticalStartingPosition .. "\n") 
-		end
-	end
+        buttons[buttonNumber] = true
+        stickyButtons[buttonNumber] = true
+
+        if debuggingEnabled then
+            OutputLogMessage("\nEvent: " .. event .. " for button: " ..
+                                 buttonNumber .. "\n")
+        end
+
+        -- Get starting mouse position
+        horizontalStartingPosition, verticalStartingPosition =
+            GetMousePosition()
+
+        if debuggingEnabled then
+            OutputLogMessage("Horizontal starting Position: " ..
+                                 horizontalStartingPosition .. "\n")
+            OutputLogMessage("Vertical starting Position: " ..
+                                 verticalStartingPosition .. "\n")
+        end
+    end
 
     -- =============================
 
-	if event == "MOUSE_BUTTON_RELEASED" then
-	        buttons[buttonNumber] = false
-		if debuggingEnabled then OutputLogMessage("\nEvent: " .. event .. " for button: " .. buttonNumber .. "\n") end
-		
-		-- Get ending mouse Position
-		horizontalEndingPosition, verticalEndingPosition = GetMousePosition()
-		
-		if debuggingEnabled then 
-			OutputLogMessage("Horizontal ending Position: " .. horizontalEndingPosition .. "\n") 
-			OutputLogMessage("Vertical ending Position: " .. verticalEndingPosition .. "\n") 
-		end
+    if event == "MOUSE_BUTTON_RELEASED" then
+        buttons[buttonNumber] = false
 
-		-- Calculate differences between start and end Positions
-		horizontalDifference = horizontalStartingPosition - horizontalEndingPosition
-		verticalDifference   = verticalStartingPosition   - verticalEndingPosition
-
-        if horizontalDifference >  minimalHorizontalMovement then direction = "L" 
-        elseif horizontalDifference < -minimalHorizontalMovement then direction = "R"
-        elseif verticalDifference   >  minimalVerticalMovement   then direction = "D"
-        elseif verticalDifference   < -minimalVerticalMovement   then direction = "U" 
-        else direction = ""
+        if debuggingEnabled then
+            OutputLogMessage("\nEvent: " .. event .. " for button: " ..
+                                 buttonNumber .. "\n")
         end
 
-        if direction then
-            key = buttonNumber .. direction
-            if actions[os][key] and type(actions[os][key]) == "function" then 
-                actions[os][key]() 
-                if debuggingEnabled then OutputLogMessage("Key" .. key) end
+        -- Only unset sticky buttons and run actions if this is the last button
+        if getMaskString(buttons) == getEmptyMaskString() then
+            
+
+            -- Get ending mouse Position
+            horizontalEndingPosition, verticalEndingPosition =
+                GetMousePosition()
+
+            if debuggingEnabled then
+                OutputLogMessage("Horizontal ending Position: " ..
+                                     horizontalEndingPosition .. "\n")
+                OutputLogMessage("Vertical ending Position: " ..
+                                     verticalEndingPosition .. "\n")
             end
+
+            -- Calculate differences between start and end Positions
+            horizontalDifference = horizontalStartingPosition -
+                                       horizontalEndingPosition
+            verticalDifference = verticalStartingPosition -
+                                     verticalEndingPosition
+
+            if horizontalDifference > minimalHorizontalMovement then
+                direction = "L"
+            elseif horizontalDifference < -minimalHorizontalMovement then
+                direction = "R"
+            elseif verticalDifference > minimalVerticalMovement then
+                direction = "D"
+            elseif verticalDifference < -minimalVerticalMovement then
+                direction = "U"
+            else
+                direction = ""
+            end
+
+            if direction then
+                -- Get key from ALL buttons that were pressed during gesture (plus direction)
+                key = getPressedButtons() .. direction
+                
+                if actions[os][key] and type(actions[os][key]) == "function" then
+                    if gesturesEnabled then
+                        actions[os][key]()
+                    end
+                    if debuggingEnabled then
+                        OutputLogMessage("Key" .. key)
+                    end
+                end
+            end
+
+            clearStickyButtons()
+            direction = nil
         end
-        
-        direction = nil
-	end
-	
-	if debuggingEnabled then
-	  OutputLogMessage("Button states: ")
-	  for i=1,9 do OutputLogMessage(tostring(buttons[i] and 1 or 0)) end
-	  OutputLogMessage("\n")
-	end
-	
+
+    end
+
 end
 
 -- ==========================================================================================
 
+function getMaskString(arrayOfBools)
+    maskStr = ""
+    for i = 1, numButtons do maskStr = maskStr .. tostring(arrayOfBools[i] and 1 or 0) end
+    return maskStr
+end
+
+function getEmptyMaskString()
+  maskStr = ""
+  for i = 1, numButtons do maskStr = maskStr .. "0" end
+  return maskStr
+end
+
+function getPressedButtons()
+    pressedButtons = ""
+    for i = 1, numButtons do
+       if stickyButtons[i] then
+         pressedButtons = pressedButtons .. tostring(i)
+       end
+    end
+    return pressedButtons
+end
+
+function clearStickyButtons()
+  for i = 1, numButtons do stickyButtons[i] = false end
+end
+
 -- Helper Functions
 function pressTwoKeys(firstKey, secondKey)
-	PressKey(firstKey)
-	Sleep(delay)
-	PressKey(secondKey)
-	Sleep(delay)
-	ReleaseKey(secondKey)
-	Sleep(delay)
-	ReleaseKey(firstKey)  
+    PressKey(firstKey)
+    Sleep(delay)
+    PressKey(secondKey)
+    Sleep(delay)
+    ReleaseKey(secondKey)
+    Sleep(delay)
+    ReleaseKey(firstKey)
 end
 
 -- Helper Functions
 function pressThreeKeys(firstKey, secondKey, thirdKey)
-	PressKey(firstKey)
-	Sleep(delay)
-	PressKey(secondKey)
-	Sleep(delay)
-	PressKey(thirdKey)
-	Sleep(delay)
+    PressKey(firstKey)
+    Sleep(delay)
+    PressKey(secondKey)
+    Sleep(delay)
+    PressKey(thirdKey)
+    Sleep(delay)
 
-       ReleaseKey(thirdKey)
-	Sleep(delay)
-	ReleaseKey(firstKey)
-	Sleep(delay)
-	ReleaseKey(secondKey)
+    ReleaseKey(thirdKey)
+    Sleep(delay)
+    ReleaseKey(firstKey)
+    Sleep(delay)
+    ReleaseKey(secondKey)
 end
+
+-- ==================================================================
