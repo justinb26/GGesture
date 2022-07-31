@@ -67,65 +67,65 @@ for i = 1, numButtons do stickyButtons[i] = false end
 
 -- Button 4 (Bottom Right) - Magnet 1/2
 -- actions["macos"]["4"] = function() PressAndReleaseMouseButton(4) end
-actions["macos"]["4"] = function() pressTwoKeys("lgui", "equal") end
-actions["macos"]["4U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
-actions["macos"]["4D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
-actions["macos"]["4L"] = function() pressThreeKeys("lctrl", "lalt", "left") end
-actions["macos"]["4R"] = function() pressThreeKeys("lctrl", "lalt", "right") end
+actions["macos"]["4"] = function() pressKeyCombo({"lgui", "equal"}) end
+actions["macos"]["4U"] = function() pressKeyCombo({"lctrl", "lalt", "up"}) end
+actions["macos"]["4D"] = function() pressKeyCombo({"lctrl", "lalt", "down"}) end
+actions["macos"]["4L"] = function() pressKeyCombo({"lctrl", "lalt", "left"}) end
+actions["macos"]["4R"] = function() pressKeyCombo({"lctrl", "lalt", "right"}) end
 
 -- Button 5 (Bottom middle) - Magnet 1/3
 actions["macos"]["5"] = function() PressAndReleaseMouseButton(5) end
-actions["macos"]["5U"] = function() pressThreeKeys("lctrl", "lalt", "f") end
-actions["macos"]["5D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
-actions["macos"]["5L"] = function() pressThreeKeys("lctrl", "lalt", "d") end
-actions["macos"]["5R"] = function() pressThreeKeys("lctrl", "lalt", "g") end
+actions["macos"]["5U"] = function() pressKeyCombo({"lctrl", "lalt", "f"}) end
+actions["macos"]["5D"] = function() pressKeyCombo({"lctrl", "lalt", "down"}) end
+actions["macos"]["5L"] = function() pressKeyCombo({"lctrl", "lalt", "d"}) end
+actions["macos"]["5R"] = function() pressKeyCombo({"lctrl", "lalt", "g"}) end
 
 -- Button 6 (Bottom Left) - Magnet 1/6 (left)
-actions["macos"]["6"] = function() pressThreeKeys("lctrl", "lalt", "2") end
-actions["macos"]["6U"] = function() pressThreeKeys("lctrl", "lalt", "2") end
-actions["macos"]["6D"] = function() pressThreeKeys("lctrl", "lalt", "2") end
-actions["macos"]["6L"] = function() pressThreeKeys("lctrl", "lalt", "1") end
-actions["macos"]["6R"] = function() pressThreeKeys("lctrl", "lalt", "3") end
+actions["macos"]["6"] = function() pressKeyCombo({"lctrl", "lalt", "2"}) end
+actions["macos"]["6U"] = function() pressKeyCombo({"lctrl", "lalt", "2"}) end
+actions["macos"]["6D"] = function() pressKeyCombo({"lctrl", "lalt", "2"}) end
+actions["macos"]["6L"] = function() pressKeyCombo({"lctrl", "lalt", "1"}) end
+actions["macos"]["6R"] = function() pressKeyCombo({"lctrl", "lalt", "3"}) end
 
 -- Button 7 (Top Right) - Expose
 -- actions["macos"]["7"] = function() PressAndReleaseMouseButton(9) end
-actions["macos"]["7"] = function() pressTwoKeys("lgui", "minus") end
-actions["macos"]["7U"] = function() pressTwoKeys("lctrl", "up") end
-actions["macos"]["7D"] = function() pressTwoKeys("lctrl", "down") end
-actions["macos"]["7L"] = function() pressTwoKeys("lctrl", "left") end
-actions["macos"]["7R"] = function() pressTwoKeys("lctrl", "right") end
+actions["macos"]["7"] = function() pressKeyCombo({"lgui", "minus"}) end
+actions["macos"]["7U"] = function() pressKeyCombo({"lctrl", "up"}) end
+actions["macos"]["7D"] = function() pressKeyCombo({"lctrl", "down"}) end
+actions["macos"]["7L"] = function() pressKeyCombo({"lctrl", "left"}) end
+actions["macos"]["7R"] = function() pressKeyCombo({"lctrl", "right"}) end
 
 -- Button 8 (Top middle) - Magnet 1/2
 actions["macos"]["8"] = function() PressAndReleaseMouseButton(8) end
-actions["macos"]["8U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
-actions["macos"]["8D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
-actions["macos"]["8L"] = function() pressThreeKeys("lctrl", "lalt", "left") end
-actions["macos"]["8R"] = function() pressThreeKeys("lctrl", "lalt", "right") end
+actions["macos"]["8U"] = function() pressKeyCombo({"lctrl", "lalt", "up"}) end
+actions["macos"]["8D"] = function() pressKeyCombo({"lctrl", "lalt", "down"}) end
+actions["macos"]["8L"] = function() pressKeyCombo({"lctrl", "lalt", "left"}) end
+actions["macos"]["8R"] = function() pressKeyCombo({"lctrl", "lalt", "right"}) end
 
 -- Button 9 (Top left) - Magnet 1/6 (Right)
-actions["macos"]["9"] = function() pressThreeKeys("lctrl", "lalt", "5") end
-actions["macos"]["9U"] = function() pressThreeKeys("lctrl", "lalt", "5") end
-actions["macos"]["9D"] = function() pressThreeKeys("lctrl", "lalt", "5") end
-actions["macos"]["9L"] = function() pressThreeKeys("lctrl", "lalt", "4") end
-actions["macos"]["9R"] = function() pressThreeKeys("lctrl", "lalt", "6") end
+actions["macos"]["9"] = function() pressKeyCombo({"lctrl", "lalt", "5"}) end
+actions["macos"]["9U"] = function() pressKeyCombo({"lctrl", "lalt", "5"}) end
+actions["macos"]["9D"] = function() pressKeyCombo({"lctrl", "lalt", "5"}) end
+actions["macos"]["9L"] = function() pressKeyCombo({"lctrl", "lalt", "4"}) end
+actions["macos"]["9R"] = function() pressKeyCombo({"lctrl", "lalt", "6"}) end
 
 
-actions["macos"]["58L"] = function() pressTwoKeys("lctrl", "left") end
-actions["macos"]["58R"] = function() pressTwoKeys("lctrl", "right") end
+actions["macos"]["58L"] = function() pressKeyCombo({"lctrl", "left"}) end
+actions["macos"]["58R"] = function() pressKeyCombo({"lctrl", "right"}) end
 
 
 -- ==========================================================================================
 
 -- Windows actions
-actions["windows"]["5U"] = function() pressTwoKeys("lctrl", "up") end
-actions["windows"]["5D"] = function() pressTwoKeys("lctrl", "down") end
-actions["windows"]["5L"] = function() pressTwoKeys("lgui", "left") end
-actions["windows"]["5R"] = function() pressTwoKeys("lgui", "right") end
+actions["windows"]["5U"] = function() pressKeyCombo({"lctrl", "up"}) end
+actions["windows"]["5D"] = function() pressKeyCombo({"lctrl", "down"}) end
+actions["windows"]["5L"] = function() pressKeyCombo({"lgui", "left"}) end
+actions["windows"]["5R"] = function() pressKeyCombo({"lgui", "right"}) end
 
-actions["windows"]["8U"] = function() pressThreeKeys("lctrl", "lalt", "up") end
-actions["windows"]["8D"] = function() pressThreeKeys("lctrl", "lalt", "down") end
-actions["windows"]["8L"] = function() pressThreeKeys("lctrl", "lgui", "left") end
-actions["windows"]["8R"] = function() pressThreeKeys("lctrl", "lgui", "right") end
+actions["windows"]["8U"] = function() pressKeyCombo({"lctrl", "lalt", "up"}) end
+actions["windows"]["8D"] = function() pressKeyCombo({"lctrl", "lalt", "down"}) end
+actions["windows"]["8L"] = function() pressKeyCombo({"lctrl", "lgui", "left"}) end
+actions["windows"]["8R"] = function() pressKeyCombo({"lctrl", "lgui", "right"}) end
 
 -- ==========================================================================================
 
@@ -278,3 +278,17 @@ function pressThreeKeys(firstKey, secondKey, thirdKey)
 end
 
 -- ==================================================================
+
+-- Any modifiers are applied first. All keys are applied before any are released
+function pressKeyCombo(keys)
+	for i = 1, #keys do
+		PressKey(keys[i])
+		Sleep(delay)
+	end
+
+	for i = 1, #keys do
+		ReleaseKey(keys[i])
+		Sleep(delay)
+	end
+
+end
